@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Один вопрос</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="grain"></div>
+
+<button class="music-button" id="musicButton" type="button">
+    ♫
+</button>
+
+<main class="page question-page">
+
+    <div class="top-line">
+        <span>ONE QUESTION</span>
+        <span>02 / 03</span>
+    </div>
+
+    <section class="question-content">
+
+        <p class="small-text">
+            Теперь серьёзно.
+        </p>
+
+        <h1>
+            Пойдёшь<br>
+            со мной<br>
+            на свидание?
+        </h1>
+
+        <p class="question-description">
+            Место уже выбрано.<br>
+            День уже выбран.<br>
+            Осталось только твоё решение.
+        </p>
+
+    </section>
+
+    <section class="answers-area" id="answersArea">
+
+        <a href="date.html"
+           class="answer-button yes-button"
+           id="yesButton">
+
+            Да. Я иду →
+
+        </a>
+
+        <button
+            class="answer-button no-button"
+            id="noButton"
+            type="button">
+
+            Нет
+
+        </button>
+
+    </section>
+
+    <p class="no-message" id="noMessage">
+        Не получится 😏
+    </p>
+
+</main>
+
+<audio id="music" loop>
+    <source src="нужна.mp3" type="audio/mpeg">
+</audio>
+
+<script src="script.js"></script>
+
+</body>
+</html>
