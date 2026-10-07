@@ -1,189 +1,6 @@
-const music = document.getElementById("music");
-const musicButton = document.getElementById("musicButton");
-
-
-// =========================
-// MUSIC
-// =========================
-
-if (music) {
-
-    const savedTime =
-        localStorage.getItem("musicTime");
-
-    const musicWasPlaying =
-        localStorage.getItem("musicPlaying");
-
-
-    music.volume = 0.35;
-
-
-    // Ждём загрузки музыки
-    music.addEventListener("loadedmetadata", function () {
-
-        if (savedTime) {
-
-            music.currentTime =
-                parseFloat(savedTime);
-
-        }
-
-
-        if (musicWasPlaying === "true") {
-
-            music.play().catch(() => {});
-
-        }
-
-    });
-
-
-    // Сохраняем текущую секунду
-    music.addEventListener("timeupdate", function () {
-
-        localStorage.setItem(
-            "musicTime",
-            music.currentTime
-        );
-
-    });
-
-
-    // Кнопка музыки
-    if (musicButton) {
-
-        musicButton.addEventListener(
-            "click",
-            function () {
-
-                if (music.paused) {
-
-                    music.play();
-
-                    localStorage.setItem(
-                        "musicPlaying",
-                        "true"
-                    );
-
-                    musicButton.textContent = "♫";
-
-                } else {
-
-                    music.pause();
-
-                    localStorage.setItem(
-                        "musicPlaying",
-                        "false"
-                    );
-
-                    musicButton.textContent = "×";
-
-                }
-
-            }
-        );
-
-    }
-
-}
-
-
-// =========================
-// ПРОДОЛЖИТЬ
-// =========================
-
-const continueButton =
-    document.getElementById("continueButton");
-
-
-if (continueButton && music) {
-
-    continueButton.addEventListener(
-        "click",
-        function (event) {
-
-            event.preventDefault();
-
-
-            // Запускаем музыку
-            music.play().then(() => {
-
-                localStorage.setItem(
-                    "musicPlaying",
-                    "true"
-                );
-
-
-                // Сохраняем позицию прямо перед переходом
-                localStorage.setItem(
-                    "musicTime",
-                    music.currentTime
-                );
-
-
-                window.location.href =
-                    "question.html";
-
-            }).catch(() => {
-
-                window.location.href =
-                    "question.html";
-
-            });
-
-        }
-    );
-
-}
-
-
-// =========================
-// ПЕРЕХОД НА DATE.HTML
-// =========================
-
-const yesButton =
-    document.getElementById("yesButton");
-
-
-if (yesButton) {
-
-    yesButton.addEventListener(
-        "click",
-        function () {
-
-            if (music) {
-
-                localStorage.setItem(
-                    "musicTime",
-                    music.currentTime
-                );
-
-            }
-
-
-            localStorage.setItem(
-                "musicPlaying",
-                "true"
-            );
-
-        }
-    );
-
-}
-
-
-// =========================
-// УБЕГАЮЩАЯ КНОПКА "НЕТ"
-// =========================
-
-const noButton =
-    document.getElementById("noButton");
-
-const answersArea =
-    document.getElementById("answersArea");
-
-const noMessage =
-    document.getElementById("noMessage");
+const noButton = document.getElementById("noButton");
+const answersArea = document.getElementById("answersArea");
+const noMessage = document.getElementById("noMessage");
 
 
 function moveNoButton(event) {
@@ -192,74 +9,41 @@ function moveNoButton(event) {
         return;
     }
 
-
     if (event) {
-
         event.preventDefault();
         event.stopPropagation();
-
     }
 
+    const areaWidth = answersArea.clientWidth;
+    const areaHeight = answersArea.clientHeight;
 
-    const areaWidth =
-        answersArea.clientWidth;
+    const buttonWidth = noButton.offsetWidth;
+    const buttonHeight = noButton.offsetHeight;
 
-    const areaHeight =
-        answersArea.clientHeight;
+    const maxX = areaWidth - buttonWidth;
+    const maxY = areaHeight - buttonHeight;
 
+    let newX = Math.random() * maxX;
+    let newY = Math.random() * maxY;
 
-    const buttonWidth =
-        noButton.offsetWidth;
-
-    const buttonHeight =
-        noButton.offsetHeight;
-
-
-    const maxX =
-        areaWidth - buttonWidth;
-
-    const maxY =
-        areaHeight - buttonHeight;
-
-
-    let newX =
-        Math.random() * maxX;
-
-    let newY =
-        Math.random() * maxY;
-
-
-    if (newX < 250 && newY < 90) {
-
-        newX += 250;
-
+    if (newX < 230 && newY < 80) {
+        newX += 230;
     }
-
 
     if (newX > maxX) {
         newX = maxX;
     }
 
-
     if (newY > maxY) {
         newY = maxY;
     }
 
-
-    noButton.style.left =
-        newX + "px";
-
-    noButton.style.top =
-        newY + "px";
-
+    noButton.style.left = newX + "px";
+    noButton.style.top = newY + "px";
 
     if (noMessage) {
-
-        noMessage.textContent =
-            "Я бы на твоём месте выбрал «Да» 😏";
-
+        noMessage.textContent = "Я бы выбрал «Да» 😏";
     }
-
 }
 
 
@@ -270,25 +54,27 @@ if (noButton) {
         moveNoButton
     );
 
-
-    noButton.addEventListener(
-        "click",
-        moveNoButton
-    );
-
-
     noButton.addEventListener(
         "touchstart",
         moveNoButton,
         { passive: false }
     );
 
+    noButton.addEventListener(
+        "pointerdown",
+        function(event) {
+
+            if (event.pointerType === "touch") {
+                moveNoButton(event);
+            }
+
+        }
+    );
+
 }
 
 
-// =========================
-// ТАЙМЕР
-// =========================
+/* TIMER */
 
 const dateOfDate =
     new Date("2026-10-25T19:00:00");
@@ -334,56 +120,34 @@ function updateCountdown() {
         );
 
 
-    const days =
-        document.getElementById("days");
-
-    const hours =
-        document.getElementById("hours");
-
-    const minutes =
-        document.getElementById("minutes");
-
-    const seconds =
-        document.getElementById("seconds");
+    const days = document.getElementById("days");
+    const hours = document.getElementById("hours");
+    const minutes = document.getElementById("minutes");
+    const seconds = document.getElementById("seconds");
 
 
     if (days) {
-
         days.textContent =
             String(daysValue).padStart(2, "0");
-
     }
-
 
     if (hours) {
-
         hours.textContent =
             String(hoursValue).padStart(2, "0");
-
     }
-
 
     if (minutes) {
-
         minutes.textContent =
             String(minutesValue).padStart(2, "0");
-
     }
-
 
     if (seconds) {
-
         seconds.textContent =
             String(secondsValue).padStart(2, "0");
-
     }
-
 }
 
 
 updateCountdown();
 
-setInterval(
-    updateCountdown,
-    1000
-);
+setInterval(updateCountdown, 1000);

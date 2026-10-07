@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Один вопрос</title>
 
     <link rel="stylesheet" href="style.css">
-
 </head>
 
-<body>
+<body class="light-page">
 
-<div class="grain"></div>
-
-<button class="music-button" id="musicButton" type="button">
-    ♫
-</button>
+<div class="light-decoration"></div>
 
 <main class="page question-page">
 
@@ -27,7 +20,12 @@
         <span>02 / 03</span>
     </div>
 
+
     <section class="question-content">
+
+        <div class="question-number">
+            02
+        </div>
 
         <p class="small-text">
             Теперь серьёзно.
@@ -36,8 +34,10 @@
         <h1>
             Пойдёшь<br>
             со мной<br>
-            на свидание?
+            на свидание<span>?</span>
         </h1>
+
+        <div class="red-line"></div>
 
         <p class="question-description">
             Место уже выбрано.<br>
@@ -46,6 +46,7 @@
         </p>
 
     </section>
+
 
     <section class="answers-area" id="answersArea">
 
@@ -56,6 +57,7 @@
             Да. Я иду →
 
         </a>
+
 
         <button
             class="answer-button no-button"
@@ -68,15 +70,10 @@
 
     </section>
 
-    <p class="no-message" id="noMessage">
-        Не получится 😏
-    </p>
+
+    <p class="no-message" id="noMessage"></p>
 
 </main>
-
-<audio id="music" loop>
-    <source src="нужна.mp3" type="audio/mpeg">
-</audio>
 
 <script src="script.js"></script>
 
