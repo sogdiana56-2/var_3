@@ -8,53 +8,88 @@ const musicButton = document.getElementById("musicButton");
 
 if (music) {
 
+    const savedTime =
+        localStorage.getItem("musicTime");
+
     const musicWasPlaying =
         localStorage.getItem("musicPlaying");
 
-    if (musicWasPlaying === "true") {
 
-        music.volume = 0.35;
-
-        music.play().catch(() => {});
-
-    }
+    music.volume = 0.35;
 
 
+    // Ждём загрузки музыки
+    music.addEventListener("loadedmetadata", function () {
+
+        if (savedTime) {
+
+            music.currentTime =
+                parseFloat(savedTime);
+
+        }
+
+
+        if (musicWasPlaying === "true") {
+
+            music.play().catch(() => {});
+
+        }
+
+    });
+
+
+    // Сохраняем текущую секунду
+    music.addEventListener("timeupdate", function () {
+
+        localStorage.setItem(
+            "musicTime",
+            music.currentTime
+        );
+
+    });
+
+
+    // Кнопка музыки
     if (musicButton) {
 
-        musicButton.addEventListener("click", function () {
+        musicButton.addEventListener(
+            "click",
+            function () {
 
-            if (music.paused) {
+                if (music.paused) {
 
-                music.play();
+                    music.play();
 
-                localStorage.setItem(
-                    "musicPlaying",
-                    "true"
-                );
+                    localStorage.setItem(
+                        "musicPlaying",
+                        "true"
+                    );
 
-                musicButton.textContent = "♫";
+                    musicButton.textContent = "♫";
 
-            } else {
+                } else {
 
-                music.pause();
+                    music.pause();
 
-                localStorage.setItem(
-                    "musicPlaying",
-                    "false"
-                );
+                    localStorage.setItem(
+                        "musicPlaying",
+                        "false"
+                    );
 
-                musicButton.textContent = "×";
+                    musicButton.textContent = "×";
+
+                }
+
             }
-
-        });
+        );
 
     }
+
 }
 
 
 // =========================
-// START MUSIC AFTER FIRST CLICK
+// ПРОДОЛЖИТЬ
 // =========================
 
 const continueButton =
@@ -65,8 +100,12 @@ if (continueButton && music) {
 
     continueButton.addEventListener(
         "click",
-        function () {
+        function (event) {
 
+            event.preventDefault();
+
+
+            // Запускаем музыку
             music.play().then(() => {
 
                 localStorage.setItem(
@@ -74,7 +113,23 @@ if (continueButton && music) {
                     "true"
                 );
 
-            }).catch(() => {});
+
+                // Сохраняем позицию прямо перед переходом
+                localStorage.setItem(
+                    "musicTime",
+                    music.currentTime
+                );
+
+
+                window.location.href =
+                    "question.html";
+
+            }).catch(() => {
+
+                window.location.href =
+                    "question.html";
+
+            });
 
         }
     );
@@ -83,7 +138,42 @@ if (continueButton && music) {
 
 
 // =========================
-// RUNNING "NO" BUTTON
+// ПЕРЕХОД НА DATE.HTML
+// =========================
+
+const yesButton =
+    document.getElementById("yesButton");
+
+
+if (yesButton) {
+
+    yesButton.addEventListener(
+        "click",
+        function () {
+
+            if (music) {
+
+                localStorage.setItem(
+                    "musicTime",
+                    music.currentTime
+                );
+
+            }
+
+
+            localStorage.setItem(
+                "musicPlaying",
+                "true"
+            );
+
+        }
+    );
+
+}
+
+
+// =========================
+// УБЕГАЮЩАЯ КНОПКА "НЕТ"
 // =========================
 
 const noButton =
@@ -128,7 +218,6 @@ function moveNoButton(event) {
     const maxX =
         areaWidth - buttonWidth;
 
-
     const maxY =
         areaHeight - buttonHeight;
 
@@ -139,9 +228,6 @@ function moveNoButton(event) {
     let newY =
         Math.random() * maxY;
 
-
-    // Не даём кнопке попасть слишком близко
-    // к кнопке "Да"
 
     if (newX < 250 && newY < 90) {
 
@@ -177,8 +263,6 @@ function moveNoButton(event) {
 }
 
 
-// Компьютер
-
 if (noButton) {
 
     noButton.addEventListener(
@@ -193,36 +277,18 @@ if (noButton) {
     );
 
 
-    // Телефон
-
     noButton.addEventListener(
         "touchstart",
         moveNoButton,
         { passive: false }
     );
 
-
-    noButton.addEventListener(
-        "pointerdown",
-        function(event) {
-
-            if (event.pointerType === "touch") {
-
-                moveNoButton(event);
-
-            }
-
-        }
-    );
-
 }
 
 
 // =========================
-// COUNTDOWN
+// ТАЙМЕР
 // =========================
-
-// ИЗМЕНИ ЗДЕСЬ ДАТУ И ВРЕМЯ
 
 const dateOfDate =
     new Date("2026-10-25T19:00:00");
@@ -237,25 +303,6 @@ function updateCountdown() {
 
 
     if (difference <= 0) {
-
-        const days =
-            document.getElementById("days");
-
-        const hours =
-            document.getElementById("hours");
-
-        const minutes =
-            document.getElementById("minutes");
-
-        const seconds =
-            document.getElementById("seconds");
-
-
-        if (days) days.textContent = "00";
-        if (hours) hours.textContent = "00";
-        if (minutes) minutes.textContent = "00";
-        if (seconds) seconds.textContent = "00";
-
         return;
     }
 
